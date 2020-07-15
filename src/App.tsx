@@ -46,7 +46,7 @@ function App() {
     alert('open');
   }
 
-  const misc = () => alert('should not fire');
+  const misc = () => alert('should only fire if not prevented');
   const [prevent, setPrevent] = useState(false);
   const handlePrevent = useCallback(() => setPrevent(prevValue => !prevValue), [prevent]);
 

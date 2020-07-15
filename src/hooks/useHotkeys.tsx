@@ -25,9 +25,7 @@ export const useHotkeys = (keyMap: KeyMap, handlers: HandlerMap) => {
 
 function mapKeysToHandlers(keyMap: KeyMap, handlers: HandlerMap) {
   for (const [actionName, descriptor] of Object.entries(keyMap)) {
-    if (!(actionName in handlers)) {
-      throw `${actionName} has no handler`;
-    } else {
+    if (handlers.hasOwnProperty(actionName)) {
       bind(descriptor.keys, handlers[actionName]);
     }
   }
