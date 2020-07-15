@@ -6,7 +6,7 @@ import {
   ExtendedKeyboardEvent,
   HandlerMap
 } from './hooks/useHotkeys';
-import { HotKeysSidebar } from './components/HotkeysList';
+import { HotkeysDisplay } from './components/HotkeysDisplay';
 
 // This object can be pulled out of the component and instead being imported
 const keyMap: KeyMap = {
@@ -66,7 +66,7 @@ function App() {
       <button onClick={handlePrevent}>
         Prevent {JSON.stringify(prevent)}
       </button>
-      <HotKeysSidebar keyMap={keyMap} />
+      <HotkeysDisplay keyMap={keyMap} />
     </div>
   );
 }

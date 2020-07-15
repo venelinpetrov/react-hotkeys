@@ -2,7 +2,7 @@ import React, { PropsWithChildren } from 'react';
 import { KeyMap, KeyDescriptor } from "../hooks/useHotkeys";
 import { groupBy, objToArray } from '../utils';
 
-const HotKeysGroup:
+const HotkeysGroup:
   React.FC<PropsWithChildren<{ groupName: string }>> = ({ groupName, children }) => {
   return (
     <div>
@@ -12,7 +12,7 @@ const HotKeysGroup:
   );
 }
 
-const HotKeysList = ({ hotkeysList }: { hotkeysList: KeyDescriptor[] }) => {
+const HotkeysTable = ({ hotkeysList }: { hotkeysList: KeyDescriptor[] }) => {
   return (
     <table>
       <thead>
@@ -37,7 +37,7 @@ const HotKeysList = ({ hotkeysList }: { hotkeysList: KeyDescriptor[] }) => {
   );
 }
 
-export const HotKeysSidebar = ({ keyMap }: { keyMap: KeyMap }) => {
+export const HotkeysDisplay = ({ keyMap }: { keyMap: KeyMap }) => {
   const hotKeysList = objToArray(keyMap);
   const byGroupName = groupBy<KeyDescriptor>(keyDescriptor => {
     return keyDescriptor.group || 'No Group';
@@ -48,9 +48,9 @@ export const HotKeysSidebar = ({ keyMap }: { keyMap: KeyMap }) => {
     <>
       {Object.keys(groups).map(groupName => {
         return (
-          <HotKeysGroup key={groupName} groupName={groupName}>
-            <HotKeysList hotkeysList={groups[groupName]}/>
-          </HotKeysGroup>
+          <HotkeysGroup key={groupName} groupName={groupName}>
+            <HotkeysTable hotkeysList={groups[groupName]}/>
+          </HotkeysGroup>
         )
       })}
     </>
