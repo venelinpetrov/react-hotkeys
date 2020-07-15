@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { bind } from 'mousetrap';
+import { bind, unbind } from 'mousetrap';
 
 export interface ExtendedKeyboardEvent extends KeyboardEvent {
   returnValue: boolean; // IE returnValue
@@ -20,13 +20,20 @@ export interface HandlerMap {
 }
 
 export const useHotkeys = (keyMap: KeyMap, handlers: HandlerMap) => {
-  useEffect(() => mapKeysToHandlers(keyMap, handlers), [keyMap, handlers]);
+  useEffect(() => {
+    const hotkeys = mapKeysToHandlers(keyMap, handlers)
+    return () => hotkeys.forEach(k => unbind(k));
+  }, [keyMap, handlers]);
 }
 
 function mapKeysToHandlers(keyMap: KeyMap, handlers: HandlerMap) {
+  const hotkeys = [];
+
   for (const [actionName, descriptor] of Object.entries(keyMap)) {
     if (handlers.hasOwnProperty(actionName)) {
+      hotkeys.push(descriptor.keys)
       bind(descriptor.keys, handlers[actionName]);
     }
   }
+  return hotkeys;
 }

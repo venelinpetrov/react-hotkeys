@@ -8,6 +8,7 @@ import {
 } from './hooks/useHotkeys';
 import { HotKeysSidebar } from './components/HotkeysList';
 
+// This object can be pulled out of the component and instead being imported
 const keyMap: KeyMap = {
   UNDO: {
     name: 'Undo',
@@ -41,7 +42,7 @@ function App() {
   const redo = () => alert('redo');
 
   // Example with preventing the default browser behavior
-  const open = (e: ExtendedKeyboardEvent)=> {
+  const open = (e: ExtendedKeyboardEvent) => {
     e.preventDefault();
     alert('open');
   }
