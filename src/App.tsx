@@ -7,6 +7,7 @@ import {
   HandlerMap
 } from './hooks/useHotkeys';
 import { HotkeysDisplay } from './components/HotkeysDisplay';
+import { SubComponent } from './components/SubComponent';
 
 // This object can be pulled out of the component and instead being imported
 const keyMap: KeyMap = {
@@ -67,6 +68,7 @@ function App() {
         Prevent {JSON.stringify(prevent)}
       </button>
       <HotkeysDisplay keyMap={keyMap} />
+      <SubComponent />
     </div>
   );
 }
