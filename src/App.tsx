@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import './App.css';
 import {
   useHotkeys,
@@ -11,29 +11,29 @@ import { HotKeysSidebar } from './components/HotkeysList';
 const keyMap: KeyMap = {
   UNDO: {
     name: 'Undo',
-    description: 'Perform undo operation',
+    description: 'Simplest example',
     group: 'Edit',
     keys: ['ctrl+z', 'command+z']
   },
   REDO: {
     name: 'Redo',
-    description: 'Perform redo operation',
+    description: 'Simplest example',
     group: 'Edit',
     keys: ['ctrl+shift+z', 'command+shift+z']
   },
   OPEN: {
     name: 'Open File',
-    description: 'Opens a file',
+    description: 'Example with preventing the default browser behavior',
     group: 'File',
     keys: ['ctrl+o']
   },
   MISC: {
     name: 'Open File',
-    description: 'Test the prevent functionality',
+    description: 'Example with preventing handler from executing',
     // group: '', // No group case test
-    keys: ['shift+w']
+    keys: ['shift+w', 'shift+e']
   }
-}
+};
 
 function App() {
   // Simplest example
@@ -50,12 +50,12 @@ function App() {
   const [prevent, setPrevent] = useState(false);
   const handlePrevent = useCallback(() => setPrevent(prevValue => !prevValue), [prevent]);
 
-  const handlersMap: HandlerMap = {
-    UNDO: undo,
-    REDO: redo,
-    OPEN: open,
-    MISC: () => !prevent && misc() // Example how to prevent handler from executing
-  };
+  const handlersMap: HandlerMap = useMemo(() => ({
+    UNDO: undo, // Simplest example
+    REDO: redo, // Simplest example
+    OPEN: open, // Example with preventing the default browser behavior
+    MISC: () => !prevent && misc() // Example with preventing handler from executing
+  }), [prevent]);
 
   useHotkeys(keyMap, handlersMap);
 
