@@ -16,24 +16,32 @@ export interface KeyMap {
 }
 
 export interface HandlerMap {
-  [key: string]: (e: ExtendedKeyboardEvent) => any
+  [key: string]: (e: ExtendedKeyboardEvent, combo?: string) => any
 }
 
-export const useHotkeys = (keyMap: KeyMap, handlers: HandlerMap, el?: React.MutableRefObject<null>, ) => {
+export const useHotkeys = (
+  keyMap: KeyMap,
+  handlers: HandlerMap,
+  ref?: React.MutableRefObject<null>,
+  stopCallback?: (e: ExtendedKeyboardEvent, element: Element, combo: string) => boolean) => {
   useEffect(() => {
-    const hotkeys = mapKeysToHandlers(keyMap, handlers, el);
-    return () => hotkeys.forEach(k => unbind(k));
-  }, [keyMap, handlers]);
-}
+    const hotkeys:string[][] = [];
 
-function mapKeysToHandlers(keyMap: KeyMap, handlers: HandlerMap, el?: React.MutableRefObject<null>, ) {
-  const hotkeys = [];
+    const MousetrapInstance = Mousetrap(ref?.current || document.body);
+    for (const [actionName, descriptor] of Object.entries(keyMap)) {
+      if (handlers.hasOwnProperty(actionName)) {
+        hotkeys.push(descriptor.keys);
 
-  for (const [actionName, descriptor] of Object.entries(keyMap)) {
-    if (handlers.hasOwnProperty(actionName)) {
-      hotkeys.push(descriptor.keys);
-      Mousetrap(el?.current || document.body).bind(descriptor.keys, handlers[actionName]);
+        MousetrapInstance.bind(descriptor.keys, handlers[actionName]);
+      }
     }
-  }
-  return hotkeys;
-}
+    Mousetrap.stopCallback = stopCallback || Mousetrap.prototype.stopCallback
+
+    return () =>{
+      hotkeys.forEach(k => {
+        MousetrapInstance.unbind(k);
+      });
+    };
+  }, [keyMap, handlers]);
+};
+
